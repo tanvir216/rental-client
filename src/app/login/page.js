@@ -8,6 +8,7 @@ import Logo from "@/components/Logo";
 function Login() {
   const router = useRouter();
   const [busy, setBusy] = useState(false);
+  const [show, setShow] = useState(false);
   const n = useSearchParams().get("next");
   const next = n && n.startsWith("/") && !n.startsWith("//") ? n : "/";
   const submit = async (e) => {
@@ -85,13 +86,23 @@ function Login() {
             </div>
             <div>
               <label className="field-label">Password</label>
-              <input
-                name="password"
-                type="password"
-                required
-                placeholder="Your password"
-                className="input input-bordered w-full"
-              />
+              <div className="relative">
+                <input
+                  name="password"
+                  type={show ? "text" : "password"}
+                  required
+                  placeholder="Your password"
+                  className="input input-bordered w-full pr-12"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShow(!show)}
+                  aria-label={show ? "Hide password" : "Show password"}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-sm opacity-60 hover:opacity-100"
+                >
+                  {show ? "🙈" : "👁️"}
+                </button>
+              </div>
             </div>
             <button disabled={busy} className="btn btn-primary w-full">
               {busy ? "Logging in..." : "Login"}
