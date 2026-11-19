@@ -1,1 +1,13 @@
-export default function Loading() { return <div className="min-h-[60vh] grid place-items-center"><div className="text-center"><span className="loading loading-ring text-primary" style={{ width: 72, height: 72 }} /><p className="mt-2 text-sm font-semibold opacity-60">Loading…</p></div></div>; }
+export default function Loading() {
+  return (
+    <div className="min-h-[60vh] grid place-items-center">
+      <div className="text-center">
+        <span
+          className="loading loading-ring text-primary"
+          style={{ width: 72, height: 72 }}
+        />
+        <p className="mt-2 text-sm font-semibold opacity-60">Loading…</p>
+      </div>
+    </div>
+  );
+}
