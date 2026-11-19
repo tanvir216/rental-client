@@ -1,0 +1,2 @@
+import Link from 'next/link';
+export default function NotFound() { return <div className="container-x grid min-h-[70vh] place-items-center py-12 text-center"><div><h1 className="gradient-text font-display text-9xl font-black leading-none" style={{ filter: 'drop-shadow(0 10px 30px rgba(255,127,0,.35))' }}>404</h1><span className="palette-bar mx-auto mt-6 block w-40" /><p className="py-6 text-lg opacity-70">This page could not be found.</p><Link href="/" className="btn btn-primary btn-lg">Back to Home</Link></div></div>; }

@@ -1,0 +1,2 @@
+'use client';
+export default function Error({ reset }) { return <div className="container-x grid min-h-[70vh] place-items-center py-12 text-center"><div className="surface max-w-md p-10"><span className="mx-auto grid h-20 w-20 place-items-center rounded-full bg-error/15 text-4xl">⚠️</span><h1 className="page-title mt-5 !text-3xl">Something went wrong</h1><p className="mt-3 text-sm opacity-70">An unexpected error occurred. Please try again.</p><button onClick={reset} className="btn btn-primary mt-6">Try again</button></div></div>; }
