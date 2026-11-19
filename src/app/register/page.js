@@ -8,6 +8,7 @@ import Logo from "@/components/Logo";
 export default function Register() {
   const router = useRouter();
   const [busy, setBusy] = useState(false);
+  const [show, setShow] = useState(false);
   const submit = async (e) => {
     e.preventDefault();
     const f = new FormData(e.target),
@@ -108,13 +109,23 @@ export default function Register() {
             </div>
             <div>
               <label className="field-label">Password</label>
-              <input
-                name="password"
-                type="password"
-                required
-                placeholder="Min 6 chars, upper + lower case"
-                className="input input-bordered w-full"
-              />
+              <div className="relative">
+                <input
+                  name="password"
+                  type={show ? "text" : "password"}
+                  required
+                  placeholder="Min 6 chars, upper + lower case"
+                  className="input input-bordered w-full pr-12"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShow(!show)}
+                  aria-label={show ? "Hide password" : "Show password"}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-sm opacity-60 hover:opacity-100"
+                >
+                  {show ? "🙈" : "👁️"}
+                </button>
+              </div>
             </div>
             <button disabled={busy} className="btn btn-primary w-full">
               {busy ? "Creating..." : "Register"}
