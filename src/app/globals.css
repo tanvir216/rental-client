@@ -52,13 +52,8 @@ body {
 }
 /* Dark: neutral dark, no brown tint */
 [data-theme="rentdark"] body {
-  background-color: #111010;
-  background-image: radial-gradient(
-    900px 500px at 100% -5%,
-    rgba(242, 138, 46, 0.05),
-    transparent 60%
-  );
-  background-attachment: fixed;
+  background-color: #000000;
+  background-image: none;
 }
 h1,
 h2,
