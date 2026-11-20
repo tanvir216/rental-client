@@ -13,14 +13,11 @@ const cats = [
   ["Event Equipment", "🎪"],
 ];
 
-const tile = [
-  { bg: "#FFD3AA", fg: "#2A1400", chip: "rgba(255,255,255,.55)" },
-  { bg: "#FFA95B", fg: "#1A0C00", chip: "rgba(255,255,255,.4)" },
-  { bg: "#FF7F00", fg: "#1A0C00", chip: "rgba(255,255,255,.35)" },
-  { bg: "#B05400", fg: "#FFFFFF", chip: "rgba(255,255,255,.2)" },
-  { bg: "#522600", fg: "#FFD3AA", chip: "rgba(255,211,170,.18)" },
-  { bg: "#000000", fg: "#FFFFFF", chip: "rgba(255,127,0,.3)" },
-];
+const tile = Array(6).fill({
+  bg: "rgba(242,138,46,.14)",
+  fg: "#C4691A",
+  chip: "rgba(242,138,46,.14)",
+});
 const why = [
   ["💰", "Affordable Prices", "Transparent daily, weekly and monthly rates."],
   ["✅", "Verified Owners", "Every listing is approved by our admins."],
@@ -66,7 +63,7 @@ const fade = {
 
 const H = ({ eyebrow, children, sub, light }) => (
   <div className="mx-auto mb-12 max-w-2xl text-center">
-    <span className="eyebrow" style={light ? { color: "#FFA95B" } : undefined}>
+    <span className="eyebrow" style={light ? { color: "#F5A35C" } : undefined}>
       {eyebrow}
     </span>
     <h2 className="section-title mt-3">{children}</h2>
@@ -88,16 +85,16 @@ export default function Home() {
         className="relative isolate grid min-h-[82vh] place-items-center overflow-hidden px-4 py-24 text-white"
         style={{
           background:
-            "linear-gradient(105deg, rgba(0,0,0,.93) 0%, rgba(82,38,0,.82) 52%, rgba(255,127,0,.38) 100%), url('https://images.unsplash.com/photo-1581094288338-2314dddb7ece?w=1600') center/cover",
+            "linear-gradient(180deg, rgba(0,0,0,.78) 0%, rgba(0,0,0,.62) 50%, rgba(0,0,0,.9) 100%), url('https://images.unsplash.com/photo-1581094288338-2314dddb7ece?w=1600') center/cover",
         }}
       >
         <div
           className="pointer-events-none absolute -right-24 top-10 -z-10 h-96 w-96 rounded-full blur-3xl"
-          style={{ background: "rgba(255,127,0,.35)" }}
+          style={{ background: "rgba(242,138,46,.14)" }}
         />
         <div
           className="pointer-events-none absolute -left-24 bottom-0 -z-10 h-80 w-80 rounded-full blur-3xl"
-          style={{ background: "rgba(255,169,91,.2)" }}
+          style={{ background: "rgba(245,163,92,.08)" }}
         />
         <motion.div
           initial={{ opacity: 0, y: 36 }}
@@ -105,7 +102,7 @@ export default function Home() {
           transition={{ duration: 0.7 }}
           className="container-x max-w-5xl text-center"
         >
-          <span className="mb-6 inline-flex items-center gap-2 rounded-full border border-[#ffa95b]/50 bg-black/40 px-4 py-1.5 text-xs font-bold uppercase tracking-[0.2em] text-[#ffd3aa] backdrop-blur">
+          <span className="mb-6 inline-flex items-center gap-2 rounded-full border border-[#F5A35C]/50 bg-black/40 px-4 py-1.5 text-xs font-bold uppercase tracking-[0.2em] text-[#ffd3aa] backdrop-blur">
             <i className="h-2 w-2 animate-pulse rounded-full bg-primary" />
             Equipment Rental Platform
           </span>
@@ -113,7 +110,7 @@ export default function Home() {
             Rent the right <span className="gradient-text">equipment</span>, on
             demand
           </h1>
-          <p className="mx-auto max-w-2xl py-7 text-lg leading-relaxed text-[#ffe7cf]/85">
+          <p className="mx-auto max-w-2xl py-7 text-lg leading-relaxed text-[#f1ebe4]/85">
             Connect with verified owners and rent construction, photography,
             vehicles and more with secure online payments.
           </p>
@@ -161,7 +158,6 @@ export default function Home() {
         </div>
       </section>
 
-    
       <section className="py-16 sm:py-20" style={{ background: "var(--soft)" }}>
         <div className="container-x">
           <H
@@ -176,29 +172,22 @@ export default function Home() {
                 key={c}
                 {...fade}
                 transition={{ duration: 0.5, delay: i * 0.06 }}
-                whileHover={{ y: -8, scale: 1.02 }}
+                whileHover={{ y: -5 }}
                 className="h-full"
               >
                 <Link
                   href={`/equipment?category=${encodeURIComponent(c)}`}
-                  className="group relative flex h-full min-h-[11rem] items-center gap-5 overflow-hidden rounded-3xl p-7 shadow-xl"
-                  style={{ background: tile[i].bg, color: tile[i].fg }}
+                  className="surface group relative flex h-full min-h-[9rem] items-center gap-5 overflow-hidden p-6 transition-colors hover:border-primary/60"
                 >
-                  <span
-                    className="absolute -right-8 -top-8 h-36 w-36 rounded-full transition-transform duration-500 group-hover:scale-150"
-                    style={{ background: tile[i].chip }}
-                  />
-                  <span
-                    className="relative grid h-16 w-16 shrink-0 place-items-center rounded-2xl text-4xl"
-                    style={{ background: tile[i].chip }}
-                  >
+                  <span className="absolute -right-10 -top-10 h-32 w-32 rounded-full bg-primary/10 transition-transform duration-500 group-hover:scale-150" />
+                  <span className="relative grid h-16 w-16 shrink-0 place-items-center rounded-2xl bg-primary/15 text-3xl">
                     {ic}
                   </span>
                   <span className="relative">
                     <span className="block font-display text-xl font-extrabold leading-snug">
                       {c}
                     </span>
-                    <span className="mt-1 inline-flex items-center gap-1 text-sm font-semibold opacity-80">
+                    <span className="mt-1 inline-flex items-center gap-1 text-sm font-semibold brand-ink">
                       Explore{" "}
                       <i className="transition-transform group-hover:translate-x-1">
                         →
@@ -228,10 +217,7 @@ export default function Home() {
               transition={{ duration: 0.5, delay: i * 0.08 }}
               className="surface lift h-full p-7 text-center"
             >
-              <span
-                className="mx-auto grid h-16 w-16 place-items-center rounded-2xl text-3xl shadow-lg"
-                style={{ background: tile[(i + 1) % 6].bg }}
-              >
+              <span className="mx-auto grid h-16 w-16 place-items-center rounded-2xl bg-primary/15 text-3xl">
                 {ic}
               </span>
               <h3 className="mt-5 font-display text-xl font-bold">{t}</h3>
@@ -259,7 +245,7 @@ export default function Home() {
               className="absolute left-[12%] right-[12%] top-9 hidden h-0.5 lg:block"
               style={{
                 background:
-                  "repeating-linear-gradient(90deg,#FF7F00 0 10px,transparent 10px 20px)",
+                  "repeating-linear-gradient(90deg,#F28A2E 0 10px,transparent 10px 20px)",
               }}
             />
             {steps.map(([n, t, d]) => (
@@ -271,8 +257,8 @@ export default function Home() {
                 <div
                   className="relative mx-auto grid h-[4.5rem] w-[4.5rem] place-items-center rounded-full font-display text-3xl font-black text-[#1A0C00] shadow-xl"
                   style={{
-                    background: "linear-gradient(135deg,#FF7F00,#FFA95B)",
-                    boxShadow: "0 0 0 8px rgba(255,127,0,.15)",
+                    background: "linear-gradient(135deg,#F28A2E,#F5A35C)",
+                    boxShadow: "0 0 0 8px rgba(242,138,46,.15)",
                   }}
                 >
                   {n}
@@ -290,7 +276,7 @@ export default function Home() {
         className="relative overflow-hidden py-16 text-white sm:py-20"
         style={{
           background:
-            "radial-gradient(600px 300px at 90% 0%, rgba(255,127,0,.35), transparent 60%), linear-gradient(135deg,#000 0%,#522600 100%)",
+            "radial-gradient(600px 300px at 90% 0%, rgba(242,138,46,.14), transparent 60%), #0a0a0a",
         }}
       >
         <div className="container-x">
@@ -303,17 +289,17 @@ export default function Home() {
                 key={l}
                 {...fade}
                 transition={{ duration: 0.5, delay: i * 0.08 }}
-                className="rounded-3xl border border-[#ffa95b]/30 bg-white/5 p-7 text-center backdrop-blur"
+                className="rounded-3xl border border-[#F5A35C]/30 bg-white/5 p-7 text-center backdrop-blur"
               >
                 <div
                   className="font-display text-4xl font-black sm:text-5xl"
                   style={{
-                    color: ["#FFD3AA", "#FFA95B", "#FF7F00", "#FFA95B"][i],
+                    color: "#F5A35C",
                   }}
                 >
                   {v}
                 </div>
-                <div className="mt-2 text-sm font-semibold uppercase tracking-wider text-[#ffe7cf]/70">
+                <div className="mt-2 text-sm font-semibold uppercase tracking-wider text-[#f1ebe4]/70">
                   {l}
                 </div>
               </motion.div>

@@ -5,7 +5,7 @@ export default function NotFound() {
       <div>
         <h1
           className="gradient-text font-display text-9xl font-black leading-none"
-          style={{ filter: "drop-shadow(0 10px 30px rgba(255,127,0,.35))" }}
+          style={{ filter: "drop-shadow(0 10px 30px rgba(242,138,46,.35))" }}
         >
           404
         </h1>

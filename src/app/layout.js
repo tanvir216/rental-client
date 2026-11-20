@@ -9,9 +9,9 @@ export const metadata = {
     "Rent construction, photography, vehicle, agriculture, electronics and event equipment from verified owners.",
 };
 const toastStyle = {
-  background: "#140A03",
-  color: "#FFE7CF",
-  border: "1px solid #FF7F00",
+  background: "#0e0e0e",
+  color: "#f1ebe4",
+  border: "1px solid #F28A2E",
   borderRadius: "14px",
   padding: "12px 16px",
   fontWeight: 600,
@@ -43,7 +43,7 @@ export default function RootLayout({ children }) {
             position="top-center"
             toastOptions={{
               style: toastStyle,
-              success: { iconTheme: { primary: "#FF7F00", secondary: "#000" } },
+              success: { iconTheme: { primary: "#F28A2E", secondary: "#000" } },
               error: { iconTheme: { primary: "#FF6B5E", secondary: "#000" } },
             }}
           />

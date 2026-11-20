@@ -4,8 +4,8 @@ export default function Logo({ light = false }) {
       <span
         className="grid h-10 w-10 place-items-center rounded-xl shadow-lg"
         style={{
-          background: "linear-gradient(135deg,#FF7F00,#FFA95B)",
-          boxShadow: "0 8px 18px -8px rgba(255,127,0,.9)",
+          background: "linear-gradient(135deg,#F28A2E,#F5A35C)",
+          boxShadow: "0 8px 18px -8px rgba(242,138,46,.9)",
         }}
       >
         <svg
@@ -13,7 +13,7 @@ export default function Logo({ light = false }) {
           height="22"
           viewBox="0 0 24 24"
           fill="none"
-          stroke="#140A03"
+          stroke="#0e0e0e"
           strokeWidth="2.2"
           strokeLinecap="round"
           strokeLinejoin="round"

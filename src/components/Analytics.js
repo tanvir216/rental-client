@@ -13,14 +13,14 @@ import useFetch from "@/lib/useFetch";
 import { Spin } from "./Table";
 
 const tiles = [
-  { bar: "#FF7F00", chip: "rgba(255,127,0,.16)" },
-  { bar: "#B05400", chip: "rgba(176,84,0,.16)" },
-  { bar: "#FFA95B", chip: "rgba(255,169,91,.22)" },
-  { bar: "#522600", chip: "rgba(82,38,0,.14)" },
+  { bar: "#F28A2E", chip: "rgba(242,138,46,.16)" },
+  { bar: "#C4691A", chip: "rgba(242,138,46,.16)" },
+  { bar: "#F5A35C", chip: "rgba(245,163,92,.22)" },
+  { bar: "#1a1a1a", chip: "rgba(0,0,0,.14)" },
   { bar: "#FFD3AA", chip: "rgba(255,211,170,.35)" },
   { bar: "#000000", chip: "rgba(0,0,0,.1)" },
 ];
-const shades = ["#FF7F00", "#FFA95B", "#B05400"];
+const shades = ["#F28A2E", "#F5A35C", "#C4691A"];
 export default function Analytics({ url, stats, chartKey, dataKey, title }) {
   const [d] = useFetch(url);
   if (!d) return <Spin />;
@@ -64,8 +64,8 @@ export default function Analytics({ url, stats, chartKey, dataKey, title }) {
             <BarChart data={data} margin={{ left: -10, right: 8 }}>
               <defs>
                 <linearGradient id="barG" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="#FF7F00" />
-                  <stop offset="100%" stopColor="#B05400" />
+                  <stop offset="0%" stopColor="#F28A2E" />
+                  <stop offset="100%" stopColor="#C4691A" />
                 </linearGradient>
               </defs>
               <CartesianGrid
@@ -87,15 +87,15 @@ export default function Analytics({ url, stats, chartKey, dataKey, title }) {
                 tick={{ fill: "currentColor", opacity: 0.7, fontSize: 12 }}
               />
               <Tooltip
-                cursor={{ fill: "rgba(255,127,0,.1)" }}
+                cursor={{ fill: "rgba(242,138,46,.1)" }}
                 contentStyle={{
-                  background: "#140A03",
-                  border: "1px solid #FF7F00",
+                  background: "#0e0e0e",
+                  border: "1px solid #F28A2E",
                   borderRadius: 12,
-                  color: "#FFE7CF",
+                  color: "#f1ebe4",
                 }}
-                labelStyle={{ color: "#FFA95B", fontWeight: 700 }}
-                itemStyle={{ color: "#FFE7CF" }}
+                labelStyle={{ color: "#F5A35C", fontWeight: 700 }}
+                itemStyle={{ color: "#f1ebe4" }}
               />
               <Bar
                 dataKey={dataKey}
