@@ -6,6 +6,7 @@ import { authClient } from "@/lib/auth-client";
 import { Spin } from "@/components/Table";
 export default function Profile() {
   const [u, setU] = useState(null);
+  const [up, setUp] = useState(false);
   useEffect(() => {
     api("/users/me")
       .then(setU)
@@ -38,6 +39,31 @@ export default function Profile() {
       toast.error(x.message);
     }
   };
+  const upload = async (e) => {
+    const file = e.target.files?.[0];
+    e.target.value = "";
+    if (!file) return;
+    if (file.size > 5 * 1024 * 1024)
+      return toast.error("Image must be smaller than 5 MB");
+    setUp(true);
+    try {
+      const fd = new FormData();
+      fd.append("image", file);
+      const r = await (
+        await fetch(
+          `https://api.imgbb.com/1/upload?key=${process.env.NEXT_PUBLIC_IMGBB_KEY}`,
+          { method: "POST", body: fd },
+        )
+      ).json();
+      if (!r.success) throw new Error("Image upload failed");
+      setU((o) => ({ ...o, photo: r.data.url }));
+      toast.success("Photo uploaded. Press Update Profile to save.");
+    } catch (x) {
+      toast.error(x.message || "Image upload failed");
+    }
+    setUp(false);
+  };
+  const isData = (u.photo || "").startsWith("data:");
   const f = "input input-bordered w-full";
   return (
     <form onSubmit={save} className="surface mx-auto max-w-2xl overflow-hidden">
@@ -48,12 +74,12 @@ export default function Profile() {
             "radial-gradient(300px 140px at 90% 0%, rgba(255,211,170,.5), transparent 60%), linear-gradient(120deg,#FF7F00,#B05400 60%,#522600)",
         }}
       />
-      <div className="-mt-14 px-6 pb-8 sm:px-10">
+      <div className="relative z-10 -mt-14 px-6 pb-8 sm:px-10">
         <div className="flex flex-col items-center text-center">
           <img
-            src={u.photo}
+            src={u.photo || "https://i.ibb.co/2kRjVHB/user.png"}
             alt=""
-            className="h-28 w-28 rounded-full object-cover shadow-xl"
+            className="relative h-28 w-28 rounded-full bg-base-100 object-cover shadow-xl"
             style={{ border: "5px solid var(--c-orange)" }}
           />
           <h1 className="dash-title mt-3">{u.name || "My Profile"}</h1>
@@ -78,12 +104,31 @@ export default function Profile() {
           </div>
           <div className="sm:col-span-2">
             <label className="field-label">Profile image</label>
-            <input
-              className={f}
-              value={u.photo || ""}
-              onChange={set("photo")}
-              placeholder="Image URL"
-            />
+            <div className="flex flex-col gap-2 sm:flex-row">
+              <input
+                className={f}
+                type="url"
+                value={isData ? "" : u.photo || ""}
+                onChange={set("photo")}
+                placeholder={
+                  isData
+                    ? "Current photo is uploaded. Paste a new URL"
+                    : "https://..."
+                }
+              />
+              <label
+                className={`btn btn-outline shrink-0 ${up ? "btn-disabled" : ""}`}
+              >
+                {up ? "Uploading..." : "Upload photo"}
+                <input
+                  type="file"
+                  accept="image/*"
+                  className="hidden"
+                  onChange={upload}
+                  disabled={up}
+                />
+              </label>
+            </div>
           </div>
           <div>
             <label className="field-label">Phone number</label>

@@ -103,6 +103,8 @@ export default function Register() {
                 name="photo"
                 type="url"
                 required
+                pattern="https?://.+"
+                title="Enter a direct image link starting with http:// or https://"
                 placeholder="https://..."
                 className="input input-bordered w-full"
               />

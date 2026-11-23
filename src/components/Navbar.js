@@ -152,48 +152,54 @@ export default function Navbar() {
           </button>
           {user ? (
             <>
-              <div className="dropdown dropdown-end">
-                <label
-                  tabIndex={0}
-                  className="btn btn-ghost btn-circle avatar h-11 w-11"
-                  aria-label="Account menu"
+            <div className="dropdown dropdown-end">
+              <label
+                tabIndex={0}
+                className="btn btn-ghost btn-circle avatar h-11 w-11"
+                aria-label="Account menu"
+              >
+                <img
+                  src={user.image || "https://i.ibb.co/2kRjVHB/user.png"}
+                  alt=""
+                  className="h-10 w-10 rounded-full object-cover ring-2 ring-primary ring-offset-2 ring-offset-base-100"
+                />
+              </label>
+              <div
+                tabIndex={0}
+                onClick={() => document.activeElement?.blur()}
+                className="dropdown-content z-50 mt-3 w-64 rounded-2xl bg-base-100 p-3 shadow-2xl"
+                style={{ border: "1px solid var(--line)" }}
+              >
+                <div
+                  className="mb-2 border-b px-3 pb-3"
+                  style={{ borderColor: "var(--line)" }}
                 >
-                  <img
-                    src={user.image || "https://i.ibb.co/2kRjVHB/user.png"}
-                    alt=""
-                    className="h-10 w-10 rounded-full object-cover ring-2 ring-primary ring-offset-2 ring-offset-base-100"
-                  />
-                </label>
-                <ul
-                  tabIndex={0}
-                  className="menu dropdown-content z-50 mt-3 w-64 gap-1 rounded-2xl bg-base-100 p-3 shadow-2xl"
-                  style={{ border: "1px solid var(--line)" }}
-                >
-                  <li className="pointer-events-none px-3 pb-2">
-                    <p className="font-display font-bold">{user.name}</p>
-                    <p className="truncate text-xs opacity-60">{user.email}</p>
-                    <span className="badge badge-primary badge-sm mt-1 font-bold capitalize">
-                      {role || "customer"}
-                    </span>
-                  </li>
-                  <li>
-                    <Link href={`/dashboard/${role || "customer"}`}>
-                      Dashboard
-                    </Link>
-                  </li>
-                  <li>
-                    <Link href="/dashboard/profile">My Profile</Link>
-                  </li>
-                  <li>
-                    <button onClick={logout} className="text-error">
-                      Logout
-                    </button>
-                  </li>
-                </ul>
+                  <p className="truncate font-display font-bold">{user.name}</p>
+                  <p className="truncate text-xs opacity-60">{user.email}</p>
+                  <span className="badge badge-primary badge-sm mt-2 font-bold capitalize">
+                    {role || "customer"}
+                  </span>
+                </div>
+                <ul className="menu gap-1 p-0">
+                <li>
+                  <Link href={`/dashboard/${role || "customer"}`}>
+                    Dashboard
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/dashboard/profile">My Profile</Link>
+                </li>
+                <li>
+                  <button onClick={logout} className="text-error">
+                    Logout
+                  </button>
+                </li>
+              </ul>
               </div>
-              <button onClick={logout} className="btn btn-primary btn-sm">
-                Logout
-              </button>
+            </div>
+            <button onClick={logout} className="btn btn-primary btn-sm">
+              Logout
+            </button>
             </>
           ) : (
             <div className="hidden gap-2 lg:flex">
