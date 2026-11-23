@@ -185,7 +185,7 @@ src/
 | Role         | Can do                                                                                          |
 | ------------ | ----------------------------------------------------------------------------------------------- |
 | **Customer** | Browse, favorite, book, pay, view own rentals and profile                                       |
-| **Owner**    | Everything above, plus list and manage own equipment and view rentals of their equipment        |
+| **Owner**    | List and manage own equipment, view rentals of their equipment, update booking status, profile  |
 | **Admin**    | Approve or reject equipment, manage users and roles, monitor all rentals and platform analytics |
 
 ---

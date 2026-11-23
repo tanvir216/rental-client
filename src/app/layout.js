@@ -3,10 +3,26 @@ import { Toaster } from "react-hot-toast";
 import AuthProvider from "@/components/AuthProvider";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import BackToTop from "@/components/BackToTop";
 export const metadata = {
-  title: "RentGear | Equipment Rental Platform",
+  title: {
+    default: "RentGear | Equipment Rental Platform",
+    template: "%s | RentGear",
+  },
   description:
     "Rent construction, photography, vehicle, agriculture, electronics and event equipment from verified owners.",
+  openGraph: {
+    title: "RentGear | Equipment Rental Platform",
+    description:
+      "Rent the right equipment, on demand. Verified owners, secure Stripe payments.",
+    type: "website",
+  },
+};
+export const viewport = {
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#FBF8F4" },
+    { media: "(prefers-color-scheme: dark)", color: "#000000" },
+  ],
 };
 const toastStyle = {
   background: "#0e0e0e",
@@ -50,6 +66,7 @@ export default function RootLayout({ children }) {
           <Navbar />
           <div className="min-h-[70vh]">{children}</div>
           <Footer />
+          <BackToTop />
         </AuthProvider>
       </body>
     </html>

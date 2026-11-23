@@ -307,6 +307,35 @@ h4,
   }
 }
 
+/* FAQ accordion */
+.faq summary::-webkit-details-marker {
+  display: none;
+}
+.faq[open] {
+  border-color: rgba(242, 138, 46, 0.45);
+}
+
+/* Skeleton shimmer (theme-aware) */
+.skeleton {
+  background-color: var(--soft);
+  background-image: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(242, 138, 46, 0.12) 50%,
+    transparent 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.4s ease-in-out infinite;
+}
+@keyframes shimmer {
+  from {
+    background-position: 200% 0;
+  }
+  to {
+    background-position: -200% 0;
+  }
+}
+
 /* Modal polish */
 .modal-box {
   border-radius: 1.5rem;

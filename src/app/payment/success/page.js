@@ -9,8 +9,12 @@ function Success() {
   const [state, setState] = useState("loading");
   const [msg, setMsg] = useState("");
   useEffect(() => {
-    if (sid)
-      api("/payments/confirm", { method: "POST", body: { sessionId: sid } })
+    if (!sid) {
+      setMsg("Missing payment session.");
+      setState("fail");
+      return;
+    }
+    api("/payments/confirm", { method: "POST", body: { sessionId: sid } })
         .then(() => setState("ok"))
         .catch((x) => {
           setMsg(x.message || "");

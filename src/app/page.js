@@ -1,9 +1,35 @@
 "use client";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { api } from "@/lib/api";
 import EquipmentCard from "@/components/EquipmentCard";
+import { CardGridSkeleton } from "@/components/Skeleton";
+import CountUp from "@/components/CountUp";
+
+const faqs = [
+  [
+    "How do I rent equipment?",
+    "Browse or search, pick your dates and quantity, then pay securely with Stripe. The owner is notified instantly and your booking appears in My Rentals.",
+  ],
+  [
+    "Can I list my own equipment?",
+    "Yes. Register, ask an admin for the Owner role, then add your equipment with photos and pricing. Listings go live after admin approval.",
+  ],
+  [
+    "Is my payment secure?",
+    "All payments are processed by Stripe Checkout. We never store your card details on our servers.",
+  ],
+  [
+    "What if I need to cancel?",
+    "Contact the owner or support before the rental start date. Eligible payments are refunded to the original payment method.",
+  ],
+  [
+    "Are the owners verified?",
+    "Every listing is reviewed and approved by our admin team before it becomes visible to customers.",
+  ],
+];
 const cats = [
   ["Construction Equipment", "🏗️"],
   ["Photography Equipment", "📷"],
@@ -72,12 +98,21 @@ const H = ({ eyebrow, children, sub, light }) => (
   </div>
 );
 export default function Home() {
-  const [items, setItems] = useState([]);
+  const router = useRouter();
+  const [items, setItems] = useState(null);
+  const [q, setQ] = useState("");
   useEffect(() => {
     api("/equipment/featured")
       .then(setItems)
-      .catch(() => {});
+      .catch(() => setItems([]));
   }, []);
+  const search = (e) => {
+    e.preventDefault();
+    const t = q.trim();
+    router.push(
+      t ? `/equipment?search=${encodeURIComponent(t)}` : "/equipment",
+    );
+  };
   return (
     <main>
       {/* Banner */}
@@ -114,21 +149,51 @@ export default function Home() {
             Connect with verified owners and rent construction, photography,
             vehicles and more with secure online payments.
           </p>
-          <Link href="/equipment" className="btn btn-primary btn-lg px-10">
-            Browse Equipment
+          <form
+            onSubmit={search}
+            role="search"
+            className="mx-auto flex w-full max-w-2xl items-center gap-2 rounded-full border border-white/20 bg-white/10 p-1.5 pl-5 shadow-2xl backdrop-blur-md focus-within:border-[#F5A35C]"
+          >
             <svg
-              width="18"
-              height="18"
+              width="20"
+              height="20"
               viewBox="0 0 24 24"
               fill="none"
               stroke="currentColor"
-              strokeWidth="2.6"
+              strokeWidth="2.4"
               strokeLinecap="round"
-              strokeLinejoin="round"
+              className="shrink-0 opacity-70"
+              aria-hidden="true"
             >
-              <path d="M5 12h14M13 6l6 6-6 6" />
+              <circle cx="11" cy="11" r="7" />
+              <path d="M20 20l-3.5-3.5" />
             </svg>
-          </Link>
+            <input
+              value={q}
+              onChange={(e) => setQ(e.target.value)}
+              placeholder="Search excavator, camera, tractor…"
+              aria-label="Search equipment"
+              className="min-w-0 flex-1 bg-transparent py-2.5 text-base text-white outline-none placeholder:text-white/50"
+            />
+            <button className="btn btn-primary px-7">Search</button>
+          </form>
+          <div className="mt-5 flex flex-wrap items-center justify-center gap-2 text-sm">
+            <span className="text-white/60">Popular:</span>
+            {cats.slice(0, 4).map(([c, ic]) => (
+              <Link
+                key={c}
+                href={`/equipment?category=${encodeURIComponent(c)}`}
+                className="rounded-full border border-white/20 bg-white/5 px-3.5 py-1.5 text-white/85 backdrop-blur transition-colors hover:border-[#F5A35C] hover:bg-white/15"
+              >
+                {ic} {c.split(" ")[0]}
+              </Link>
+            ))}
+          </div>
+          <ul className="mt-10 flex flex-wrap items-center justify-center gap-x-8 gap-y-2 text-sm font-semibold text-[#ffd3aa]/90">
+            <li>✓ Verified owners</li>
+            <li>✓ Secure Stripe payments</li>
+            <li>✓ Flexible rental periods</li>
+          </ul>
         </motion.div>
         <span
           className="palette-bar absolute inset-x-0 bottom-0 rounded-none"
@@ -144,17 +209,26 @@ export default function Home() {
         >
           Featured Equipment
         </H>
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {items.map((e, i) => (
-            <motion.div
-              key={e._id}
-              {...fade}
-              transition={{ duration: 0.5, delay: i * 0.08 }}
-              className="h-full"
-            >
-              <EquipmentCard e={e} />
-            </motion.div>
-          ))}
+        {!items ? (
+          <CardGridSkeleton />
+        ) : (
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {items.map((e, i) => (
+              <motion.div
+                key={e._id}
+                {...fade}
+                transition={{ duration: 0.5, delay: i * 0.08 }}
+                className="h-full"
+              >
+                <EquipmentCard e={e} />
+              </motion.div>
+            ))}
+          </div>
+        )}
+        <div className="mt-10 text-center">
+          <Link href="/equipment" className="btn btn-outline px-8">
+            View all equipment →
+          </Link>
         </div>
       </section>
 
@@ -297,7 +371,7 @@ export default function Home() {
                     color: "#F5A35C",
                   }}
                 >
-                  {v}
+                  <CountUp value={v} />
                 </div>
                 <div className="mt-2 text-sm font-semibold uppercase tracking-wider text-[#f1ebe4]/70">
                   {l}
@@ -348,6 +422,57 @@ export default function Home() {
               </div>
             </motion.div>
           ))}
+        </div>
+      </section>
+
+      {/* FAQ */}
+      <section className="py-16 sm:py-20" style={{ background: "var(--soft)" }}>
+        <div className="container-x max-w-3xl">
+          <H eyebrow="FAQ" sub="Quick answers to common questions.">
+            Frequently Asked Questions
+          </H>
+          <div className="space-y-3">
+            {faqs.map(([qn, a]) => (
+              <details key={qn} className="faq surface group">
+                <summary className="flex cursor-pointer list-none items-center justify-between gap-4 p-5 font-display text-lg font-bold">
+                  {qn}
+                  <span className="faq-icon grid h-8 w-8 shrink-0 place-items-center rounded-full bg-primary/15 text-xl brand-ink transition-transform duration-300 group-open:rotate-45">
+                    +
+                  </span>
+                </summary>
+                <p className="px-5 pb-5 text-sm leading-relaxed opacity-75">
+                  {a}
+                </p>
+              </details>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Owner CTA */}
+      <section className="section container-x">
+        <div
+          className="relative overflow-hidden rounded-[2rem] p-10 text-center text-white sm:p-14"
+          style={{
+            background:
+              "radial-gradient(500px 280px at 100% 0%, rgba(242,138,46,.45), transparent 60%), linear-gradient(135deg,#000 0%,#522600 100%)",
+          }}
+        >
+          <h2 className="font-display text-3xl font-black sm:text-4xl">
+            Own equipment sitting idle?
+          </h2>
+          <p className="mx-auto mt-3 max-w-xl text-[#ffe7cf]/80">
+            List it on RentGear and start earning. Reach thousands of renters
+            with secure payments and simple booking management.
+          </p>
+          <div className="mt-8 flex flex-wrap justify-center gap-3">
+            <Link href="/register" className="btn btn-primary btn-lg px-8">
+              Become an owner
+            </Link>
+            <Link href="/equipment" className="btn btn-glass btn-lg px-8">
+              Browse equipment
+            </Link>
+          </div>
         </div>
       </section>
     </main>

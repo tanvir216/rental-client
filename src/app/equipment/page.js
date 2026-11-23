@@ -3,6 +3,7 @@ import { Suspense, useEffect, useRef, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { api } from "@/lib/api";
 import EquipmentCard from "@/components/EquipmentCard";
+import { CardGridSkeleton } from "@/components/Skeleton";
 const cats = [
   "Construction Equipment",
   "Photography Equipment",
@@ -14,7 +15,7 @@ const cats = [
 function List() {
   const sp = useSearchParams();
   const [f, setF] = useState({
-    search: "",
+    search: sp.get("search") || "",
     category: sp.get("category") || "",
     rentalType: "",
     minPrice: "",
@@ -48,6 +49,23 @@ function List() {
     setF((o) => (o.category === cat ? o : { ...o, category: cat, page: 1 }));
   }, [cat]);
   const set = (k) => (e) => setF({ ...f, [k]: e.target.value, page: 1 });
+  const blank = {
+    search: "",
+    category: "",
+    rentalType: "",
+    minPrice: "",
+    maxPrice: "",
+    available: "",
+    sort: "",
+    page: 1,
+  };
+  const active = Object.entries(f).filter(
+    ([k, v]) => k !== "page" && k !== "sort" && v !== "",
+  );
+  const goPage = (p) => {
+    setF({ ...f, page: p });
+    window.scrollTo({ top: 260, behavior: "smooth" });
+  };
   const sel = "select select-bordered w-full",
     inp = "input input-bordered w-full";
   return (
@@ -130,13 +148,38 @@ function List() {
             <option value="high">Price high to low</option>
           </select>
         </div>
-        {!data ? (
-          <div className="grid place-items-center py-20">
-            <span
-              className="loading loading-ring text-primary"
-              style={{ width: 64, height: 64 }}
-            />
+        {active.length > 0 && (
+          <div className="-mt-4 mb-8 flex flex-wrap items-center gap-2">
+            <span className="text-sm font-semibold opacity-60">Filters:</span>
+            {active.map(([k, v]) => (
+              <button
+                key={k}
+                onClick={() => setF({ ...f, [k]: "", page: 1 })}
+                className="inline-flex items-center gap-1.5 rounded-full bg-primary/15 px-3 py-1 text-xs font-bold brand-ink transition-colors hover:bg-primary/25"
+                aria-label={`Remove filter ${k}`}
+              >
+                {k === "available"
+                  ? v === "true"
+                    ? "Available"
+                    : "Unavailable"
+                  : k === "minPrice"
+                    ? `Min $${v}`
+                    : k === "maxPrice"
+                      ? `Max $${v}`
+                      : v}
+                <span aria-hidden="true">✕</span>
+              </button>
+            ))}
+            <button
+              onClick={() => setF(blank)}
+              className="btn btn-ghost btn-xs ml-1"
+            >
+              Clear all
+            </button>
           </div>
+        )}
+        {!data ? (
+          <CardGridSkeleton count={9} />
         ) : !data.items.length ? (
           <div className="surface grid place-items-center gap-2 py-20 text-center">
             <span className="text-5xl">🔍</span>
@@ -152,17 +195,36 @@ function List() {
             ))}
           </div>
         )}
-        <div className="pager join mt-10 flex justify-center gap-2">
-          {Array.from({ length: data?.pages || 0 }, (_, i) => (
+        {(data?.pages || 0) > 1 && (
+          <div className="pager join mt-10 flex flex-wrap justify-center gap-2">
             <button
-              key={i}
-              className={`btn ${f.page === i + 1 ? "btn-active" : ""}`}
-              onClick={() => setF({ ...f, page: i + 1 })}
+              className="btn"
+              disabled={f.page <= 1}
+              onClick={() => goPage(f.page - 1)}
+              aria-label="Previous page"
             >
-              {i + 1}
+              ←
             </button>
-          ))}
-        </div>
+            {Array.from({ length: data.pages }, (_, i) => (
+              <button
+                key={i}
+                className={`btn ${f.page === i + 1 ? "btn-active" : ""}`}
+                onClick={() => goPage(i + 1)}
+                aria-current={f.page === i + 1 ? "page" : undefined}
+              >
+                {i + 1}
+              </button>
+            ))}
+            <button
+              className="btn"
+              disabled={f.page >= data.pages}
+              onClick={() => goPage(f.page + 1)}
+              aria-label="Next page"
+            >
+              →
+            </button>
+          </div>
+        )}
       </div>
     </main>
   );
