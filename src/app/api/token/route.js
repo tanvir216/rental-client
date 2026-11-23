@@ -28,7 +28,7 @@ export async function POST() {
     return Response.json(data, { status: r.status });
   } catch (e) {
     return Response.json(
-      { message: "Backend server e connect kora jacche na" },
+      { message: "Could not reach the backend server" },
       { status: 502 },
     );
   }

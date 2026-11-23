@@ -30,8 +30,26 @@ export default function AllRentals() {
       <Table
         rows={d}
         cols={[
-          ["Customer", (r) => r.customer.email],
-          ["Owner", (r) => r.owner?.email],
+          [
+            "Customer",
+            (r) => (
+              <div>
+                {r.customer?.name}
+                <br />
+                <span className="text-xs opacity-70">{r.customer?.email}</span>
+              </div>
+            ),
+          ],
+          [
+            "Owner",
+            (r) => (
+              <div>
+                {r.owner?.name}
+                <br />
+                <span className="text-xs opacity-70">{r.owner?.email}</span>
+              </div>
+            ),
+          ],
           ["Equipment", (r) => r.equipmentName],
           ["Duration", (r) => `${fmt(r.startDate)} - ${fmt(r.endDate)}`],
           ["Amount", (r) => "$" + r.totalAmount],
