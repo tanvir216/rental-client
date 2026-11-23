@@ -23,7 +23,12 @@ module.exports = {
     extend: {
       fontFamily: {
         sans: ["var(--font-body)", "DM Sans", "system-ui", "sans-serif"],
-        display: ["var(--font-display)", "Outfit", "system-ui", "sans-serif"],
+        display: [
+          "var(--font-display)",
+          "Plus Jakarta Sans",
+          "system-ui",
+          "sans-serif",
+        ],
       },
       colors: {
         brand: {

@@ -2,7 +2,7 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { api } from "@/lib/api";
 import EquipmentCard from "@/components/EquipmentCard";
 import { CardGridSkeleton } from "@/components/Skeleton";
@@ -101,6 +101,8 @@ export default function Home() {
   const router = useRouter();
   const [items, setItems] = useState(null);
   const [q, setQ] = useState("");
+  const [imgOk, setImgOk] = useState(true);
+  const reduce = useReducedMotion();
   useEffect(() => {
     api("/equipment/featured")
       .then(setItems)
@@ -109,96 +111,170 @@ export default function Home() {
   const search = (e) => {
     e.preventDefault();
     const t = q.trim();
-    router.push(
-      t ? `/equipment?search=${encodeURIComponent(t)}` : "/equipment",
-    );
+    router.push(t ? `/equipment?search=${encodeURIComponent(t)}` : "/equipment");
   };
   return (
     <main>
       {/* Banner */}
       <section
-        className="relative isolate grid min-h-[82vh] place-items-center overflow-hidden px-4 py-24 text-white"
+        className="relative isolate overflow-hidden"
         style={{
           background:
-            "linear-gradient(180deg, rgba(0,0,0,.78) 0%, rgba(0,0,0,.62) 50%, rgba(0,0,0,.9) 100%), url('https://images.unsplash.com/photo-1581094288338-2314dddb7ece?w=1600') center/cover",
+            "radial-gradient(700px 380px at 92% 0%, rgba(242,138,46,.16), transparent 60%), radial-gradient(520px 300px at 0% 100%, rgba(242,138,46,.08), transparent 60%)",
         }}
       >
-        <div
-          className="pointer-events-none absolute -right-24 top-10 -z-10 h-96 w-96 rounded-full blur-3xl"
-          style={{ background: "rgba(242,138,46,.14)" }}
-        />
-        <div
-          className="pointer-events-none absolute -left-24 bottom-0 -z-10 h-80 w-80 rounded-full blur-3xl"
-          style={{ background: "rgba(245,163,92,.08)" }}
-        />
-        <motion.div
-          initial={{ opacity: 0, y: 36 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7 }}
-          className="container-x max-w-5xl text-center"
-        >
-          <span className="mb-6 inline-flex items-center gap-2 rounded-full border border-[#F5A35C]/50 bg-black/40 px-4 py-1.5 text-xs font-bold uppercase tracking-[0.2em] text-[#ffd3aa] backdrop-blur">
-            <i className="h-2 w-2 animate-pulse rounded-full bg-primary" />
-            Equipment Rental Platform
-          </span>
-          <h1 className="font-display text-5xl font-black leading-[1.05] sm:text-6xl lg:text-7xl">
-            Rent the right <span className="gradient-text">equipment</span>, on
-            demand
-          </h1>
-          <p className="mx-auto max-w-2xl py-7 text-lg leading-relaxed text-[#f1ebe4]/85">
-            Connect with verified owners and rent construction, photography,
-            vehicles and more with secure online payments.
-          </p>
-          <form
-            onSubmit={search}
-            role="search"
-            className="mx-auto flex w-full max-w-2xl items-center gap-2 rounded-full border border-white/20 bg-white/10 p-1.5 pl-5 shadow-2xl backdrop-blur-md focus-within:border-[#F5A35C]"
+        <div className="container-x grid items-center gap-14 py-14 sm:py-20 lg:grid-cols-[1.05fr_1fr] lg:gap-10 lg:py-24">
+          <motion.div
+            initial={{ opacity: 0, y: 28 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className="text-center lg:text-left"
           >
-            <svg
-              width="20"
-              height="20"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2.4"
-              strokeLinecap="round"
-              className="shrink-0 opacity-70"
-              aria-hidden="true"
+            <span className="inline-flex items-center gap-2 rounded-full border border-primary/40 bg-primary/10 px-3.5 py-1.5 text-xs font-bold uppercase tracking-[0.14em] brand-ink">
+              <i className="h-1.5 w-1.5 animate-pulse rounded-full bg-primary" />
+              Equipment Rental Platform
+            </span>
+            <h1 className="mt-5 font-display text-[2.15rem] font-bold leading-[1.12] tracking-tight sm:text-5xl lg:text-[3.2rem]">
+              Rent the right <span className="hero-accent">equipment</span>, on
+              demand
+            </h1>
+            <p className="mx-auto mt-5 max-w-xl text-base leading-relaxed opacity-70 sm:text-lg lg:mx-0">
+              Connect with verified owners and rent construction, photography,
+              vehicles and more, with transparent prices and secure online
+              payments.
+            </p>
+
+            <form
+              onSubmit={search}
+              role="search"
+              className="mx-auto mt-8 flex w-full max-w-xl items-center gap-2 rounded-full bg-base-100 p-1.5 pl-5 shadow-lg transition-shadow focus-within:shadow-xl focus-within:ring-2 focus-within:ring-primary/60 lg:mx-0"
+              style={{ border: "1px solid var(--line)" }}
             >
-              <circle cx="11" cy="11" r="7" />
-              <path d="M20 20l-3.5-3.5" />
-            </svg>
-            <input
-              value={q}
-              onChange={(e) => setQ(e.target.value)}
-              placeholder="Search excavator, camera, tractor…"
-              aria-label="Search equipment"
-              className="min-w-0 flex-1 bg-transparent py-2.5 text-base text-white outline-none placeholder:text-white/50"
-            />
-            <button className="btn btn-primary px-7">Search</button>
-          </form>
-          <div className="mt-5 flex flex-wrap items-center justify-center gap-2 text-sm">
-            <span className="text-white/60">Popular:</span>
-            {cats.slice(0, 4).map(([c, ic]) => (
-              <Link
-                key={c}
-                href={`/equipment?category=${encodeURIComponent(c)}`}
-                className="rounded-full border border-white/20 bg-white/5 px-3.5 py-1.5 text-white/85 backdrop-blur transition-colors hover:border-[#F5A35C] hover:bg-white/15"
+              <svg
+                width="19"
+                height="19"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.4"
+                strokeLinecap="round"
+                className="shrink-0 opacity-50"
+                aria-hidden="true"
               >
-                {ic} {c.split(" ")[0]}
-              </Link>
-            ))}
-          </div>
-          <ul className="mt-10 flex flex-wrap items-center justify-center gap-x-8 gap-y-2 text-sm font-semibold text-[#ffd3aa]/90">
-            <li>✓ Verified owners</li>
-            <li>✓ Secure Stripe payments</li>
-            <li>✓ Flexible rental periods</li>
-          </ul>
-        </motion.div>
-        <span
-          className="palette-bar absolute inset-x-0 bottom-0 rounded-none"
-          style={{ height: 10 }}
-        />
+                <circle cx="11" cy="11" r="7" />
+                <path d="M20 20l-3.5-3.5" />
+              </svg>
+              <input
+                value={q}
+                onChange={(e) => setQ(e.target.value)}
+                placeholder="Search excavator, camera, tractor…"
+                aria-label="Search equipment"
+                className="min-w-0 flex-1 bg-transparent py-2.5 text-[15px] outline-none placeholder:opacity-50"
+              />
+              <button className="btn btn-primary px-6">Search</button>
+            </form>
+
+            <div className="mt-5 flex flex-wrap items-center justify-center gap-2 text-sm lg:justify-start">
+              <span className="opacity-60">Popular:</span>
+              {cats.slice(0, 4).map(([c, ic]) => (
+                <Link
+                  key={c}
+                  href={`/equipment?category=${encodeURIComponent(c)}`}
+                  className="rounded-full bg-base-100 px-3.5 py-1.5 font-medium transition-colors hover:border-primary hover:text-primary"
+                  style={{ border: "1px solid var(--line)" }}
+                >
+                  {ic} {c.split(" ")[0]}
+                </Link>
+              ))}
+            </div>
+
+            <ul className="mt-8 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm font-semibold opacity-80 lg:justify-start">
+              {["Verified owners", "Secure Stripe payments", "Flexible periods"].map(
+                (t) => (
+                  <li key={t} className="flex items-center gap-2">
+                    <span className="grid h-5 w-5 place-items-center rounded-full bg-primary/20 text-[11px] brand-ink">
+                      ✓
+                    </span>
+                    {t}
+                  </li>
+                ),
+              )}
+            </ul>
+          </motion.div>
+
+          {/* Visual */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.7, delay: 0.15 }}
+            className="relative mx-auto w-full max-w-md sm:max-w-lg lg:max-w-none"
+          >
+            <span
+              aria-hidden="true"
+              className="absolute inset-0 -z-10 translate-x-4 translate-y-4 rounded-[2rem] border-2 border-primary/50"
+            />
+            {imgOk ? (
+              <img
+                src="https://images.unsplash.com/photo-1581094288338-2314dddb7ece?w=1000&q=80"
+                alt="Engineers inspecting equipment"
+                onError={() => setImgOk(false)}
+                className="aspect-[5/4] w-full rounded-[2rem] object-cover shadow-2xl"
+              />
+            ) : (
+              <div
+                className="grid aspect-[5/4] w-full place-items-center rounded-[2rem] text-7xl shadow-2xl"
+                style={{ background: "linear-gradient(135deg,#F28A2E,#FFD3AA)" }}
+              >
+                🏗️
+              </div>
+            )}
+
+            {items?.[0] && (
+              <motion.div
+                animate={reduce ? undefined : { y: [0, -8, 0] }}
+                transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+                className="surface absolute -bottom-6 left-3 flex w-64 items-center gap-3 p-3 sm:-left-6"
+              >
+                <img
+                  src={items[0].image}
+                  alt=""
+                  className="h-14 w-14 shrink-0 rounded-xl object-cover"
+                />
+                <div className="min-w-0">
+                  <p className="text-[11px] font-bold uppercase tracking-wider opacity-55">
+                    Featured today
+                  </p>
+                  <p className="truncate font-display text-sm font-bold">
+                    {items[0].name}
+                  </p>
+                  <p className="text-sm font-bold brand-ink">
+                    ${Number(items[0].price).toLocaleString()}
+                    <span className="text-xs font-medium opacity-60">
+                      {" "}
+                      / {String(items[0].rentalType || "").toLowerCase()}
+                    </span>
+                  </p>
+                </div>
+              </motion.div>
+            )}
+
+            <motion.div
+              animate={reduce ? undefined : { y: [0, 8, 0] }}
+              transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+              className="surface absolute right-3 top-6 flex items-center gap-2.5 px-4 py-3 sm:-right-4"
+            >
+              <span className="grid h-9 w-9 place-items-center rounded-full bg-success/15 text-success">
+                ✓
+              </span>
+              <div>
+                <p className="font-display text-sm font-bold leading-tight">
+                  Admin approved
+                </p>
+                <p className="text-xs opacity-60">Every listing verified</p>
+              </div>
+            </motion.div>
+          </motion.div>
+        </div>
       </section>
 
       {/* Featured Equipment */}

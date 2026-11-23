@@ -5,7 +5,7 @@
 /* ───────── Brand tokens (softened) ───────── */
 :root {
   --font-body: "DM Sans";
-  --font-display: "Outfit";
+  --font-display: "Plus Jakarta Sans";
   --c-cream: #ffd3aa;
   --c-peach: #ffa95b;
   --c-orange: #f28a2e; /* was #ff7f00 – less neon */
@@ -60,7 +60,7 @@ h2,
 h3,
 h4,
 .font-display {
-  font-family: var(--font-display), "Outfit", system-ui, sans-serif;
+  font-family: var(--font-display), "Plus Jakarta Sans", system-ui, sans-serif;
   letter-spacing: -0.01em;
 }
 ::selection {
@@ -82,6 +82,12 @@ h4,
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
+  }
+  .hero-accent {
+    color: var(--brand-ink);
+    background: linear-gradient(transparent 66%, rgba(242, 138, 46, 0.28) 66%);
+    padding: 0 0.12em;
+    border-radius: 0.2em;
   }
   .palette-bar {
     height: 3px;
