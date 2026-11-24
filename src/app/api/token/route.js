@@ -8,21 +8,16 @@ export async function POST() {
 
   const u = session.user,
     base = process.env.NEXT_PUBLIC_API_URL;
-  const h = {
-    "Content-Type": "application/json",
-    "x-internal-key": process.env.INTERNAL_KEY,
-  };
 
   try {
-    await fetch(`${base}/users`, {
-      method: "POST",
-      headers: h,
-      body: JSON.stringify({ name: u.name, email: u.email, photo: u.image }),
-    });
+    // One request: the backend creates the user if new and returns the token.
     const r = await fetch(`${base}/jwt`, {
       method: "POST",
-      headers: h,
-      body: JSON.stringify({ email: u.email }),
+      headers: {
+        "Content-Type": "application/json",
+        "x-internal-key": process.env.INTERNAL_KEY,
+      },
+      body: JSON.stringify({ name: u.name, email: u.email, photo: u.image }),
     });
     const data = await r.json().catch(() => ({}));
     return Response.json(data, { status: r.status });
