@@ -135,9 +135,18 @@ export default function Register() {
           </form>
           <div className="divider text-xs font-bold opacity-60">OR</div>
           <button
-            onClick={() =>
-              authClient.signIn.social({ provider: "google", callbackURL: "/" })
-            }
+            onClick={async () => {
+              const { error } = await authClient.signIn.social({
+                provider: "google",
+                callbackURL: "/",
+              });
+              if (error) {
+                console.error("Google sign-in error", error);
+                toast.error(
+                  error.message || `Google login failed (${error.status})`,
+                );
+              }
+            }}
             className="btn btn-outline w-full"
           >
             <svg width="20" height="20" viewBox="0 0 48 48" aria-hidden="true">

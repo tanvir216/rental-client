@@ -24,8 +24,16 @@ function Login() {
     toast.success("Login successful");
     router.push(next);
   };
-  const google = () =>
-    authClient.signIn.social({ provider: "google", callbackURL: next });
+  const google = async () => {
+    const { error } = await authClient.signIn.social({
+      provider: "google",
+      callbackURL: next,
+    });
+    if (error) {
+      console.error("Google sign-in error", error);
+      toast.error(error.message || `Google login failed (${error.status})`);
+    }
+  };
   return (
     <div className="container-x grid min-h-[calc(100vh-4.5rem)] items-center py-10">
       <div
